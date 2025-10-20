@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LogozoDev invoice system — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: radial-gradient(circle at top, #000, #111 60%, #0d0d0d);
+      color: #f5f5f5;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: linear-gradient(135deg, #00e676, #00e676);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float 8s infinite;
+      box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.5;
+      }
+      90% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Page loader */
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .page-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-logo {
+      width: 120px;
+      margin-bottom: 30px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto;
+      border: 3px solid #222;
+      border-top-color: #00e676;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Login page */
+    .login-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeInPage 0.8s ease 0.3s forwards;
+      transition: opacity 0.6s ease;
+    }
+
+    .login-page.fade-out {
+      opacity: 0;
+    }
+
+    @keyframes fadeInPage {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .login-card {
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      padding: 50px 40px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(0, 230, 118, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .login-card:hover::before {
+      left: 100%;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .brand-logo-center {
+      width: 100px;
+      margin-bottom: 20px;
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    h2 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 28px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    /* Form */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 8px;
+      display: block;
+      transition: color 0.3s ease;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #2a2a2a;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      background: #0f0f0f;
+      color: #fff;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:focus {
+      border-color: #00e676;
+      background: #1a1a1a;
+      box-shadow: 0 0 0 4px rgba(0, 230, 118, 0.1);
+      transform: translateY(-2px);
+    }
+
+    input:focus + .input-border {
+      transform: scaleX(1);
+    }
+
+    .input-border {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00e676, #00e676);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    /* Buttons */
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00e676, #00c465);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 230, 118, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 2px solid #00e676;
+      color: #00e676;
+    }
+
+    .btn-secondary:hover {
+      background-color: #00e676;
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
+    }
+
+    .btn-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    .btn-primary.loading .btn-text {
+      display: none;
+    }
+
+    .btn-primary.loading .btn-spinner {
+      display: block;
+    }
+
+    .login-note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 20px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .login-error {
+      color: #ff5252;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 15px;
+      min-height: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 82, 82, 0.1);
+      border: 1px solid rgba(255, 82, 82, 0.2);
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .login-error.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .login-error.success {
+      color: #00e676;
+      background: rgba(0, 230, 118, 0.1);
+      border-color: rgba(0, 230, 118, 0.2);
+    }
+
+    /* Offline Screen */
+    .offline-splash {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.9);
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 82, 82, 0.2);
+    }
+
+    .offline-splash.active {
+      display: flex;
+    }
+
+    .offline-splash img {
+      width: 120px;
+      margin-bottom: 25px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .offline-text {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .offline-subtext {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 25px;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .login-card, .offline-splash {
+        padding: 40px 30px;
+      }
+      
+      h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Page Loader -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-content">
+      <img src="assets/logozodev.png" alt="LogozoDev logo" class="loader-logo" />
+      <div class="loader-spinner"></div>
+    </div>
+  </div>
+
+  <!-- Background Particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="login-page" id="loginPage">
+    <!-- Login Card -->
+    <div class="login-card" id="loginCard" role="main" aria-labelledby="loginTitle">
+      <img src="assets/logozodev.png" alt="LogozoDev logo" class="brand-logo-center" />
+      <h2 id="loginTitle">Welcome Back</h2>
+      <p class="subtitle">Invoice System Login</p>
+
+      <form id="loginForm" class="login-form" autocomplete="off" novalidate>
+        <div class="input-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <input id="username" name="username" type="text" placeholder="Enter your username" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">Sign In</span>
+          <div class="btn-spinner"></div>
+        </button>
+
+        <p class="login-note">Use credentials: admin / 1234</p>
+        <div id="loginError" class="login-error" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <!-- Offline Splash -->
+    <div class="offline-splash" id="offlineSplash">
+      <img src="assets/logozodev.png" alt="LogozoDev logo" />
+      <p class="offline-text">No Internet Connection</p>
+      <p class="offline-subtext">Please check your network and try again</p>
+      <button id="retryBtn" class="btn btn-secondary">
+        <span class="btn-text">Retry Connection</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const pageLoader = document.getElementById("pageLoader");
+    const loginPage = document.getElementById("loginPage");
+    const loginCard = document.getElementById("loginCard");
+    const offlineSplash = document.getElementById("offlineSplash");
+    const retryBtn = document.getElementById("retryBtn");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const particlesContainer = document.getElementById("particles");
+
+    // Page loader
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        pageLoader.classList.add("hidden");
+      }, 1000);
+    });
+
+    // Create particles
+    function createParticles() {
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        particle.style.left = Math.random() * 100 + "%";
+        particle.style.animationDelay = Math.random() * 8 + "s";
+        particle.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        particlesContainer.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // Offline handling
+    function updateOnlineStatus() {
+      if (navigator.onLine) {
+        offlineSplash.classList.remove("active");
+        loginCard.style.display = "block";
+      } else {
+        offlineSplash.classList.add("active");
+        loginCard.style.display = "none";
+      }
+    }
+
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
+    retryBtn.addEventListener("click", updateOnlineStatus);
+
+    // Login validation
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const submitBtn = e.target.querySelector(".btn-primary");
+
+      loginError.classList.remove("show", "success");
+      loginError.textContent = "";
+
+      if (!username || !password) {
+        loginError.textContent = "Please enter both username and password.";
+        loginError.classList.add("show");
+        return;
+      }
+
+      // Show loading
+      submitBtn.classList.add("loading");
+
+      // Simulate authentication delay
+      setTimeout(() => {
+        if (username === "admin" && password === "1234") {
+          // Smooth fade out and redirect
+          loginPage.classList.add("fade-out");
+          
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 600);
+        } else {
+          submitBtn.classList.remove("loading");
+          loginError.textContent = "Invalid username or password. Please try again.";
+          loginError.classList.add("show");
+          
+          // Shake animation
+          loginCard.style.animation = "none";
+          setTimeout(() => {
+            loginCard.style.animation = "";
+          }, 10);
+        }
+      }, 1200);
+    });
+
+    // Input animations
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => {
+      input.addEventListener("focus", function() {
+        this.parentElement.parentElement.querySelector("label").style.color = "#00e676";
+      });
+      
+      input.addEventListener("blur", function() {
+        this.parentElement.parentElement.querySelector("label").style.color = "#ddd";
+      });
+    });
+
+    // Initialize
+    updateOnlineStatus();
+  </script>
+</body>
+</html>
