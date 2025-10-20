@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>Invoice Generator</h1>
+            <p>Create professional invoices with live preview</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Preview -->
+            <div class="preview-section">
+                <div class="preview-controls">
+                    <button id="downloadPdf" class="btn btn-primary">Download PDF</button>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeBg" checked>
+                        Include background in PDF
+                    </label>
+                </div>
+                <div id="invoicePreview" class="invoice-preview"></div>
+            </div>
+
+            <!-- Form -->
+            <div class="form-section">
+                <form id="invoiceForm">
+                    <div class="form-group">
+                        <label for="invoiceNumber">Invoice Number</label>
+                        <input type="text" id="invoiceNumber" placeholder="#000001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="invoiceDate">Invoice Date</label>
+                        <input type="date" id="invoiceDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientName">Client Name</label>
+                        <input type="text" id="clientName" placeholder="Client Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientPhone">Client Phone</label>
+                        <input type="text" id="clientPhone" placeholder="+94XXXXXXXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taxRate">Tax Rate (%)</label>
+                        <input type="number" id="taxRate" step="0.01" min="0" value="0">
+                    </div>
+
+                    <div class="line-items-section">
+                        <div class="section-header">
+                            <h3>Line Items</h3>
+                            <button type="button" id="addLineItem" class="btn btn-secondary">+ Add Item</button>
+                        </div>
+                        <div id="lineItemsContainer"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes / Terms & Conditions</label>
+                        <textarea id="notes" rows="4" placeholder="Add notes or terms..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bankDetails">Bank Details</label>
+                        <textarea id="bankDetails" rows="3" placeholder="Account number: 0000000000&#10;Name: Example Name&#10;Bank: Example Bank&#10;Branch: City"></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

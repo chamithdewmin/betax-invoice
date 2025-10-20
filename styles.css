@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f7fa;
+    color: #1a202c;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.app-header {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Form Styles */
+.form-section {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: fit-content;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 500;
+    color: #2d3748;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: #4299e1;
+    color: white;
+}
+
+.btn-secondary {
+    background: #48bb78;
+    color: white;
+}
+
+.btn-danger {
+    background: #f56565;
+    color: white;
+    padding: 6px 12px;
+}
+
+/* Preview Section */
+.preview-section {
+    position: sticky;
+    top: 20px;
+}
+
+.preview-controls {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.invoice-preview {
+    background: white;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    overflow: auto;
+}
+
+/* A4 Invoice Layout */
+.invoice-container {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    position: relative;
+    background-image: url('assets/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.invoice-content {
+    position: relative;
+    z-index: 1;
+    padding: 40px 50px;
+}
+
+/* Header */
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 3px solid #1e40af;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+.company-info h2 {
+    color: #1e40af;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.invoice-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+/* Table */
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.invoice-table th {
+    background: #1e40af;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.invoice-table td {
+    background: #f8fafc;
+    padding: 10px;
+}
+
+.invoice-table tbody tr:nth-child(even) td {
+    background: white;
+}
+
+/* Totals */
+.invoice-totals {
+    width: 300px;
+    margin-left: auto;
+    font-size: 15px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.total-row.total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+/* Footer */
+.invoice-footer {
+    margin-top: 40px;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 20px;
+    font-size: 12px;
+    color: #4a5568;
+}
+
+.footer-contact {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Print Fix */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    body * {
+        visibility: hidden;
+    }
+    .invoice-container, .invoice-container * {
+        visibility: visible;
+    }
+    .invoice-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
