@@ -3,8 +3,9 @@ let invoiceData = {
   invoiceDate: new Date().toISOString().split('T')[0],
   clientName: '',
   clientPhone: '',
+  clientCapital: '',
   taxRate: 0,
-  lineItems: [{ service: '', quantity: 0, unitPrice: 0 }],
+  lineItems: [{ service: 'Betax paid vip lifetime Access', quantity: 1, unitPrice: 59 }],
   notes: 'This invoice confirms payment to BetaxVIP for the listed service. All payments are final and non-refundable once access or service begins. BetaxVIP provides educational services only and is not responsible for trading outcomes. By paying, the client agrees to these terms.',
 };
 
@@ -84,7 +85,7 @@ function calculateTotals() {
 }
 
 function formatCurrency(num) {
-  return 'LKR ' + num.toLocaleString('en-US', { minimumFractionDigits: 2 });
+  return '$ ' + num.toLocaleString('en-US', { minimumFractionDigits: 2 });
 }
 
 function updatePreview() {
@@ -99,7 +100,7 @@ function updatePreview() {
             <img src="assets/logo.png" alt="BetaxVIP Logo">
           </div>
           <div class="invoice-meta">
-            <div class="invoice-title">INVOICE</div>
+            <div class="invoice-title"><strong>INVOICE</strong></div>
             <p>${invoiceData.invoiceNumber}</p>
           </div>
         </div>
@@ -107,7 +108,9 @@ function updatePreview() {
         <div class="invoice-details">
           <p><strong>Client:</strong> ${invoiceData.clientName}</p>
           <p><strong>Phone:</strong> ${invoiceData.clientPhone}</p>
+          <p><strong>Capital USD:</strong> ${invoiceData.clientCapital}</p>
           <p><strong>Date:</strong> ${invoiceData.invoiceDate}</p>
+          <br>
         </div>
 
         <table class="invoice-table">
@@ -135,8 +138,8 @@ function updatePreview() {
         <div class="invoice-footer">
           <p><strong>Terms:</strong><br>${invoiceData.notes}</p>
           <div class="payment-footer">
-          <p>Thank you for your payment! | BetaxVIP</p>
-          <p>Email: betaxvip@gmail.com | WhatsApp: +971 55 352 6522</p>
+          <p>Thank you for your payment! | BETAXVIP</p>
+          <p>Email: betaxvip@gmail.com | Phone: +971 55 352 6522</p>
         </div>
         </div>
       </div>
