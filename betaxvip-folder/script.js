@@ -1,3 +1,4 @@
+// Initial invoice data
 let invoiceData = {
   invoiceNumber: '#000001',
   invoiceDate: new Date().toISOString().split('T')[0],
@@ -5,8 +6,10 @@ let invoiceData = {
   clientPhone: '',
   clientCapital: '',
   taxRate: 0,
+  currencySymbol: '$',
   lineItems: [{ service: 'Betax paid vip lifetime Access', quantity: 1, unitPrice: 59 }],
-  notes: 'This invoice confirms payment to BetaxVIP for the listed service. All payments are final and non-refundable once access or service begins. BetaxVIP provides educational services only and is not responsible for trading outcomes. By paying, the client agrees to these terms.',
+  notes:
+    'This invoice confirms payment to BetaxVIP for the listed service. All payments are final and non-refundable once access or service begins. BetaxVIP provides educational services only and is not responsible for trading outcomes. By paying, the client agrees to these terms.',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,13 +23,26 @@ function initializeForm() {
   for (let key in invoiceData) {
     if (document.getElementById(key)) document.getElementById(key).value = invoiceData[key];
   }
+  const currencyInput = document.getElementById('currencyInput');
+  if (currencyInput) currencyInput.value = invoiceData.currencySymbol;
 }
 
 function setupEventListeners() {
   document.querySelectorAll('#invoiceForm input, #invoiceForm textarea').forEach(input => {
     input.addEventListener('input', e => {
-      invoiceData[e.target.id] = e.target.value;
-      updatePreview();
+      const id = e.target.id;
+
+      if (id === 'currencyInput') {
+        invoiceData.currencySymbol = e.target.value.trim() || '$';
+        renderLineItems();
+        updatePreview();
+      } else if (id === 'taxRate' || id === 'clientCapital') {
+        invoiceData[id] = parseFloat(e.target.value) || 0;
+        updatePreview();
+      } else {
+        invoiceData[id] = e.target.value;
+        updatePreview();
+      }
     });
   });
 
@@ -44,7 +60,7 @@ function renderLineItems() {
     div.innerHTML = `
       <div class="form-group"><label>Service</label><input type="text" class="service" data-index="${i}" value="${item.service}"></div>
       <div class="form-group"><label>Qty</label><input type="number" class="qty" data-index="${i}" value="${item.quantity}" min="1"></div>
-      <div class="form-group"><label>Unit Price</label><input type="number" class="price" data-index="${i}" value="${item.unitPrice}" min="0"></div>
+      <div class="form-group"><label>Unit Price (${invoiceData.currencySymbol})</label><input type="number" class="price" data-index="${i}" value="${item.unitPrice}" min="0"></div>
       <button type="button" class="btn btn-danger remove" data-index="${i}">Remove</button>
     `;
     container.appendChild(div);
@@ -85,7 +101,8 @@ function calculateTotals() {
 }
 
 function formatCurrency(num) {
-  return '$ ' + num.toLocaleString('en-US', { minimumFractionDigits: 2 });
+  const symbol = invoiceData.currencySymbol || '$';
+  return `${symbol} ${num.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 }
 
 function updatePreview() {
@@ -97,7 +114,7 @@ function updatePreview() {
       <div class="invoice-content">
         <div class="invoice-header">
           <div class="company-info">
-            <img src="assets/logo.png" alt="BetaxVIP Logo">
+            <img src="https://yourdomain.com/assets/logo.png" alt="BetaxVIP Logo" crossorigin="anonymous">
           </div>
           <div class="invoice-meta">
             <div class="invoice-title"><strong>INVOICE</strong></div>
@@ -106,26 +123,30 @@ function updatePreview() {
         </div>
 
         <div class="invoice-details">
-          <p><strong>Client:</strong> ${invoiceData.clientName}</p>
-          <p><strong>Phone:</strong> ${invoiceData.clientPhone}</p>
-          <p><strong>Capital USD:</strong> ${invoiceData.clientCapital}</p>
+          <p><strong>Client:</strong> ${invoiceData.clientName || ''}</p>
+          <p><strong>Phone:</strong> ${invoiceData.clientPhone || ''}</p>
+          <p><strong>Capital:</strong> ${invoiceData.clientCapital || invoiceData.currencySymbol + ' 0.00'}</p>
           <p><strong>Date:</strong> ${invoiceData.invoiceDate}</p>
           <br>
         </div>
 
         <table class="invoice-table">
           <thead>
-            <tr><th>#</th><th>Service</th><th>Price</th><th>Qty</th><th>Total</th></tr>
+            <tr><th>#</th><th>Service</th><th>Price (${invoiceData.currencySymbol})</th><th>Qty</th><th>Total</th></tr>
           </thead>
           <tbody>
-            ${invoiceData.lineItems.map((item, i) => `
+            ${invoiceData.lineItems
+              .map(
+                (item, i) => `
               <tr>
                 <td>${i + 1}</td>
                 <td>${item.service}</td>
                 <td>${formatCurrency(item.unitPrice)}</td>
                 <td>${item.quantity}</td>
-                <td>${formatCurrency(item.quantity * item.unitPrice)}</td>
-              </tr>`).join('')}
+                <td>${formatCurrency(item.unitPrice * item.quantity)}</td>
+              </tr>`
+              )
+              .join('')}
           </tbody>
         </table>
 
@@ -138,9 +159,9 @@ function updatePreview() {
         <div class="invoice-footer">
           <p><strong>Terms:</strong><br>${invoiceData.notes}</p>
           <div class="payment-footer">
-          <p>Thank you for your payment! | BETAXVIP</p>
-          <p>Email: betaxvip@gmail.com | Phone: +971 55 352 6522</p>
-        </div>
+            <p>Thank you for your payment! | BETAXVIP</p>
+            <p>Email: betaxvip@gmail.com | Phone: +971 55 352 6522</p>
+          </div>
         </div>
       </div>
     </div>
@@ -155,11 +176,11 @@ async function downloadPDF() {
   const element = document.querySelector('.invoice-container');
   const opt = {
     margin: 0,
-    filename: `invoice-${invoiceData.invoiceNumber.replace('#','')}.pdf`,
+    filename: `invoice-${invoiceData.invoiceNumber.replace('#', '')}.pdf`,
     image: { type: 'jpeg', quality: 1 },
-    html2canvas: { scale: 3, useCORS: true, scrollY: 0 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
   };
 
   await html2pdf().set(opt).from(element).save();

@@ -451,7 +451,7 @@
   <!-- Page Loader -->
   <div class="page-loader" id="pageLoader">
     <div class="loader-content">
-      <img src="assets/logozodev.png" alt="LogozoDev logo" class="loader-logo" />
+      <img src="betaxvip-folder/assets/logozodev.png" alt="LogozoDev logo" class="loader-logo" />
       <div class="loader-spinner"></div>
     </div>
   </div>
@@ -462,7 +462,7 @@
   <div class="login-page" id="loginPage">
     <!-- Login Card -->
     <div class="login-card" id="loginCard" role="main" aria-labelledby="loginTitle">
-      <img src="assets/logozodev.png" alt="LogozoDev logo" class="brand-logo-center" />
+      <img src="betaxvip-folder/assets/logozodev.png" alt="LogozoDev logo" class="brand-logo-center" />
       <h2 id="loginTitle">Welcome Back</h2>
       <p class="subtitle">Invoice System Login</p>
 
@@ -486,14 +486,14 @@
           <div class="btn-spinner"></div>
         </button>
 
-        <p class="login-note">Use credentials: admin / 1234</p>
+        <p class="login-note">Logozodev.com | +94 74 152 5537</p>
         <div id="loginError" class="login-error" aria-live="polite"></div>
       </form>
     </div>
 
     <!-- Offline Splash -->
     <div class="offline-splash" id="offlineSplash">
-      <img src="assets/logozodev.png" alt="LogozoDev logo" />
+      <img src="betaxvip-folder/assets/logozodev.png" alt="LogozoDev logo" />
       <p class="offline-text">No Internet Connection</p>
       <p class="offline-subtext">Please check your network and try again</p>
       <button id="retryBtn" class="btn btn-secondary">
@@ -569,15 +569,19 @@
 
       // Simulate authentication delay
       setTimeout(() => {
-        if (username === "admin" && password === "1234") {
+        if (username === "betaxvip" && password === "tax1234") {
           // Smooth fade out and redirect
           loginPage.classList.add("fade-out");
           
           setTimeout(() => {
-            window.location.href = "dashboard.html";
+            window.location.href = "betaxvip-folder/betaxvip-dashboard-2025-10-21-13-00-UTC-9f3b7c2a4d8e6f1b-ae3d5c7f9b1e2a3c4d5e6f7a8b9c0d.html";
           }, 600);
         } else {
           submitBtn.classList.remove("loading");
+          
+             // Clear input fields
+          document.getElementById("username").value = "";
+          document.getElementById("password").value = "";
           loginError.textContent = "Invalid username or password. Please try again.";
           loginError.classList.add("show");
           
