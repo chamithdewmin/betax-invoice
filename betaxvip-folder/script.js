@@ -114,7 +114,7 @@ function updatePreview() {
       <div class="invoice-content">
         <div class="invoice-header">
           <div class="company-info">
-            <img src="betaxvip-folder/assets/logo.png" alt="BetaxVIP Logo" crossorigin="anonymous">
+            <img src="assets/logo.png" alt="BetaxVIP Logo" crossorigin="anonymous">
           </div>
           <div class="invoice-meta">
             <div class="invoice-title"><strong>INVOICE</strong></div>
